@@ -10,7 +10,7 @@ nginx:
             - sls: nginx.config
         - watch:
             - file: /etc/nginx/nginx.conf
-            - file: /tc/nginx/conf.d/*
+            - file: /etc/nginx/conf.d/*
 
 # Inert state can be used elsewhere to reload nginx
 nginx-reload:
