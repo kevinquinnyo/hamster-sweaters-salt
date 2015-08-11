@@ -21,12 +21,14 @@ class Config():
         {'makedirs': True}
     ]
         
-    def __init__(self, pillar):
+    def __init__(self, pillar, grains):
         self.pillar = pillar
+        self.grains = grains
         self.webroot_base = pillar['webroot_base']
         self.websites = pillar['websites']
         self.http_port = 8080 if pillar['varnish'] else 80
         self.cluster = pillar['cluster'] if pillar['cluster'] else False
+        self.hhvm = pillar['hhvm']
 
     def web(self):
         dir_options = [
@@ -108,12 +110,23 @@ class Config():
             security_file_options = options + [{'source': 'salt://nginx/templates/extras/{0}.inc'.format(file)}]
             self.states[self.conf_dir + 'conf.d/security.inc'] = {'file.managed': security_file_options}
 
-        main_nginx_file_options = options + [{'source': 'salt://nginx/templates/nginx.conf'}]
+        hhvm = self.hhvm
+        main_nginx_file_options = options + [
+            {'source': 'salt://nginx/templates/nginx.conf'},
+            {'context': {'hhvm': hhvm}},
+            {'template': self.defaults['template']}
+        ]
         self.states[self.conf_dir + 'nginx.conf'] = {'file.managed': main_nginx_file_options}
 
+        # ubuntu package includes this by default, debian, annoyingly does not
+        if self.grains['os'] == 'Debian':
+            line = 'fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;'
+            self.states['/etc/nginx/fastcgi_params'] = {
+                'file.append': [{'text': line}]
+            }
         
 def run():
-    config = Config(__pillar__)
+    config = Config(__pillar__, __grains__)
     config.nginx()
     config.web()
 
