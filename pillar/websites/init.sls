@@ -1,5 +1,6 @@
 cluster: False
 varnish: True
+hhvm: False
 webroot_base: '/var/www/'
 
 websites:
