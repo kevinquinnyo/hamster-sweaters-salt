@@ -12,7 +12,8 @@ class Config():
         {'user': 'root'},
         {'group': 'root'},
         {'mode': 644},
-        {'makedirs': True}
+        {'makedirs': True},
+        {'template': 'jinja'}
     ]
 
     dir_defaults = [
