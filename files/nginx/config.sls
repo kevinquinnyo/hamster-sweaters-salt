@@ -106,12 +106,22 @@ class Config():
             ]
         }
 
+        self.states['/etc/nginx/fastcgi_params'] = {
+            'file.managed': [
+                {'user': 'root'},
+                {'group': 'root'},
+                {'mode': 644},
+                {'source': 'salt://nginx/templates/fastcgi_params'}
+            ]
+        }
+
+
         # ubuntu package includes this by default, debian, annoyingly does not
-        if self.grains['os'] == 'Debian':
-            line = 'fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;'
-            self.states[self.conf_dir + 'fastcgi_params'] = {
-                'file.append': [{'text': line}]
-            }
+        #if self.grains['os'] == 'Debian':
+        #    line = 'fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;'
+        #    self.states[self.conf_dir + 'fastcgi_params'] = {
+        #        'file.append': [{'text': line}]
+        #    }
         
 def run():
     config = Config(__pillar__, __grains__)

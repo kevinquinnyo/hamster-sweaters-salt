@@ -17,7 +17,7 @@ websites:
     kevops.com:
         aliases:
             - www.kevops.com
-        ssl: False
+        ssl: True
         cms: 
             type: 'wordpress'
             plugins:
