@@ -11,7 +11,7 @@ websites:
     hamster-sweaters.com:
         aliases:
             - www.hamster-sweaters.com
-        ssl: False
+        ssl: True
         cms: False
         sub_dir: '_site'
     kevops.com:

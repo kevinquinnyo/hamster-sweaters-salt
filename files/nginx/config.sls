@@ -97,6 +97,15 @@ class Config():
         ]
         self.states[self.conf_dir + 'nginx.conf'] = {'file.managed': main_nginx_file_options}
 
+        self.states['/etc/nginx/ssl'] = {
+            'file.directory': [
+                {'user': 'root'},
+                {'group': 'root'},
+                {'mode': 700},
+                {'makedirs': True}
+            ]
+        }
+
         # ubuntu package includes this by default, debian, annoyingly does not
         if self.grains['os'] == 'Debian':
             line = 'fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;'
